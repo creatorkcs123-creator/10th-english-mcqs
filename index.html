@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MCQ Quiz</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6fb;
+    color: #1f2937;
+}
+
+/* HEADER */
+
+.header {
+    background: linear-gradient(135deg, #4f46e5, #312e81);
+    color: white;
+    padding: 25px 20px;
+}
+
+.header-content {
+    max-width: 900px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.logo p {
+    margin: 8px 0 0;
+    opacity: 0.9;
+}
+
+.score-box {
+    background: rgba(0,0,0,0.25);
+    padding: 15px 25px;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+/* MAIN */
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 25px 15px;
+}
+
+
+/* INFO BOXES */
+
+.info-boxes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.info-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.info-card h3 {
+    margin: 0 0 10px;
+    color: #6b7280;
+}
+
+.info-card p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+/* PROGRESS */
+
+.progress-container {
+    margin-bottom: 25px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 15px;
+    background: #e5e7eb;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #2563eb, #4f46e5);
+    transition: 0.4s;
+}
+
+
+/* QUIZ CARD */
+
+.quiz-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.question {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+
+/* OPTIONS */
+
+.option {
+    width: 100%;
+    padding: 18px;
+    margin: 12px 0;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    background: white;
+    font-size: 18px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.option:hover:not(:disabled) {
+    border-color: #4f46e5;
+    background: #f5f3ff;
+}
+
+.option:disabled {
+    cursor: default;
+}
+
+.correct {
+    background: #dcfce7 !important;
+    border-color: #16a34a !important;
+    color: #166534;
+}
+
+.wrong {
+    background: #fee2e2 !important;
+    border-color: #dc2626 !important;
+    color: #991b1b;
+}
+
+
+/* RESULT MESSAGE */
+
+.result-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    display: none;
+}
+
+.result-correct {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.result-wrong {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+/* BUTTONS */
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 15px;
+}
+
+button.nav-btn {
+    padding: 15px 25px;
+    border-radius: 12px;
+    border: none;
+    font-size: 17px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.previous {
+    background: white;
+    color: #2563eb;
+    border: 2px solid #2563eb !important;
+}
+
+.next {
+    background: #2563eb;
+    color: white;
+}
+
+.next:hover {
+    background: #1d4ed8;
+}
+
+.end-btn {
+    margin-top: 25px;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: #dc2626;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+
+/* FINAL RESULT */
+
+.final-result {
+    text-align: center;
+    padding: 30px;
+}
+
+.final-score {
+    font-size: 55px;
+    color: #4f46e5;
+    font-weight: bold;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px) {
+
+    .header-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .info-boxes {
+        grid-template-columns: 1fr;
+    }
+
+    .question {
+        font-size: 21px;
+    }
+
+    .option {
+        font-size: 16px;
+    }
+
+    .quiz-card {
+        padding: 20px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="header-content">
+
+        <div class="logo">
+
+            <h1>🎓 MCQ Quiz</h1>
+
+            <p>Test Your Knowledge</p>
+
+        </div>
+
+
+        <div class="score-box">
+
+            🏆 Score: <span id="score">0</span>/<span id="totalScore">33</span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div class="container">
+
+
+<!-- INFO -->
+
+<div class="info-boxes">
+
+    <div class="info-card">
+
+        <h3>📝 Question</h3>
+
+        <p id="questionCount">1/33</p>
+
+    </div>
+
+
+    <div class="info-card">
+
+        <h3>⏱️ Time Left</h3>
+
+        <p id="timer">60:00</p>
+
+    </div>
+
+
+    <div class="info-card">
+
+        <h3>📚 Subject</h3>
+
+        <p>English</p>
+
+    </div>
+
+</div>
+
+
+
+<!-- PROGRESS -->
+
+<div class="progress-container">
+
+    <div class="progress-bar">
+
+        <div class="progress" id="progress"></div>
+
+    </div>
+
+</div>
+
+
+
+<!-- QUIZ -->
+
+<div class="quiz-card" id="quizCard">
+
+    <div class="question" id="question"></div>
+
+    <div id="options"></div>
+
+
+    <div class="result-message" id="resultMessage"></div>
+
+
+    <div class="buttons">
+
+        <button class="nav-btn previous" onclick="previousQuestion()">
+
+            ← Previous
+
+        </button>
+
+
+        <button class="nav-btn next" onclick="nextQuestion()">
+
+            Next →
+
+        </button>
+
+    </div>
+
+
+    <button class="end-btn" onclick="endQuiz()">
+
+        🚩 End Quiz
+
+    </button>
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* QUESTIONS */
+
+const questions = [
+
+{
+question: "Lencho had deep faith in ________.",
+options: [
+"the postmaster",
+"the postman",
+"the local leader",
+"God"
+],
+answer: 3
+},
+
+{
+question: "Who handed over the letter to Lencho?",
+options: [
+"The postmaster",
+"The postman",
+"The old lady",
+"God"
+],
+answer: 1
+},
+
+{
+question: "\"I could never repair the neglect of my youth.\" Here 'the neglect' refers to Gandhi's neglect of ________.",
+options: [
+"handwriting",
+"gymnastics",
+"study of Sanskrit",
+"Service to his father"
+],
+answer: 0
+},
+
+{
+question: "Gandhi won prizes after he passed out of the ________ standard.",
+options: [
+"second",
+"fourth",
+"sixth",
+"seventh"
+],
+answer: 0
+},
+
+{
+question: "One of India's most colourful and charming festivals of Nagaland is ________.",
+options: [
+"Moastu",
+"Wangala",
+"Ningol Chakouba",
+"Hornbill"
+],
+answer: 3
+},
+
+{
+question: "Popir is the name of a ________.",
+options: [
+"festival",
+"folk dance",
+"God",
+"tribe"
+],
+answer: 1
+},
+
+{
+question: "What is the percentage of Nitrogen in the air?",
+options: [
+"58",
+"68",
+"78",
+"88"
+],
+answer: 2
+},
+
+{
+question: "About sixty percent of air pollution is caused by ________.",
+options: [
+"animals",
+"birds",
+"automobiles",
+"aeroplanes"
+],
+answer: 2
+},
+
+{
+question: "According to Lord Eustace Percy, we should make provisions for ________ times.",
+options: [
+"good",
+"bad",
+"hard",
+"leisure"
+],
+answer: 2
+},
+
+{
+question: "Which of the following is a mean game?",
+options: [
+"Gambling",
+"Smuggling",
+"Smoking",
+"Drinking"
+],
+answer: 0
+},
+
+{
+question: "Timothy was a ________.",
+options: [
+"tiger",
+"lion",
+"wolf",
+"bear"
+],
+answer: 0
+},
+
+{
+question: "The zoo at Lucknow is ________ miles away from the writer's house.",
+options: [
+"100",
+"150",
+"200",
+"250"
+],
+answer: 2
+},
+
+{
+question: "Who was Mahmoud in the story \"A Tiger in the House\"?",
+options: [
+"Author's grandfather",
+"Author's father",
+"Author's cook",
+"Author's gardener"
+],
+answer: 2
+},
+
+{
+question: "Sergei in \"The Beggar\" is ________.",
+options: [
+"a beggar",
+"a teacher",
+"a musician",
+"an advocate"
+],
+answer: 3
+},
+
+{
+question: "Where did Sergei meet Lushkoff in the end?",
+options: [
+"Circus",
+"Theatre",
+"Railway station",
+"Magic show"
+],
+answer: 1
+},
+
+{
+question: "\"Money doesn't grow on trees here.\" Who said this?",
+options: [
+"Jurman",
+"Kariman",
+"Aunt",
+"Algu"
+],
+answer: 0
+},
+
+{
+question: "Who is the author of the story \"The Village Judge\"?",
+options: [
+"R.N. Tagore",
+"Leo Tolstoy",
+"Prem Chand",
+"Anton Chekhov"
+],
+answer: 2
+},
+
+{
+question: "The king bought the grain from ________.",
+options: [
+"a farmer",
+"the children",
+"a traveler",
+"the villagers"
+],
+answer: 2
+},
+
+{
+question: "Who came to the king with the help of one crutch?",
+options: [
+"Old man",
+"Old man's son",
+"Old man's father",
+"Old man's grandfather"
+],
+answer: 2
+},
+
+{
+question: "What was free during grandfather's time?",
+options: [
+"Land",
+"Labour",
+"Capital",
+"Gold"
+],
+answer: 0
+},
+
+{
+question: "In the poem \"All Things Bright And Beautiful\", the ________ sun is described as pleasant.",
+options: [
+"winter",
+"summer",
+"spring",
+"autumn"
+],
+answer: 1
+},
+
+{
+question: "________ are described great and small in \"All Things Bright And Beautiful\".",
+options: [
+"All creatures",
+"All things",
+"All flowers",
+"All birds"
+],
+answer: 0
+},
+
+{
+question: "The most remote group of Islands that lies to the north west of Scotland is called ________.",
+options: [
+"Arabian Sands",
+"Highland",
+"farthest Hebrides",
+"Hebrides"
+],
+answer: 2
+},
+
+{
+question: "The nightingale sings welcome notes in the shady places among the ________.",
+options: [
+"Arabian sands",
+"Highlands of Scotland",
+"Hebrides",
+"valleys of Scotland"
+],
+answer: 0
+},
+
+{
+question: "Where was the girl in the poem \"Village Song\" going to?",
+options: [
+"city",
+"school",
+"forest",
+"market"
+],
+answer: 2
+},
+
+{
+question: "The honey child is going to leave her ________.",
+options: [
+"lover",
+"father",
+"mother",
+"brother"
+],
+answer: 2
+},
+
+{
+question: "The moist east wind comes marching over the ________.",
+options: [
+"heath",
+"forests",
+"mountains",
+"bamboo trees"
+],
+answer: 0
+},
+
+{
+question: "The flowers dance upon the ________.",
+options: [
+"ground",
+"field",
+"grass",
+"earth"
+],
+answer: 2
+},
+
+{
+question: "Only the brain could explain the cause of ________.",
+options: [
+"Vicky's love",
+"Vicky's heartbeat, thud thud",
+"Vicky's accident",
+"Vicky's death"
+],
+answer: 1
+},
+
+{
+question: "Vicky's friend's house was ________.",
+options: [
+"in the town",
+"in that city",
+"in the village",
+"in the next lane"
+],
+answer: 3
+},
+
+{
+question: "The police ________ not made any arrest so far.",
+options: [
+"is",
+"are",
+"have",
+"has"
+],
+answer: 2
+},
+
+{
+question: "If you work hard, you ________ an 'A' grade.",
+options: [
+"get",
+"got",
+"will get",
+"will have got"
+],
+answer: 2
+},
+
+{
+question: "English ________ all over the world.",
+options: [
+"is spoken",
+"speaks",
+"is speaking",
+"will being spoken"
+],
+answer: 2
+}
+
+];
+
+
+/* VARIABLES */
+
+let currentQuestion = 0;
+
+let score = 0;
+
+let selectedAnswers = new Array(questions.length).fill(null);
+
+let time = 3600;
+
+
+/* LOAD QUESTION */
+
+function loadQuestion() {
+
+const q = questions[currentQuestion];
+
+document.getElementById("question").innerHTML =
+(currentQuestion + 1) + ". " + q.question;
+
+
+document.getElementById("questionCount").innerHTML =
+(currentQuestion + 1) + "/" + questions.length;
+
+
+document.getElementById("totalScore").innerHTML =
+questions.length;
+
+
+/* PROGRESS */
+
+let progressPercent =
+((currentQuestion + 1) / questions.length) * 100;
+
+document.getElementById("progress").style.width =
+progressPercent + "%";
+
+
+const optionsContainer =
+document.getElementById("options");
+
+optionsContainer.innerHTML = "";
+
+
+const resultMessage =
+document.getElementById("resultMessage");
+
+resultMessage.style.display = "none";
+
+
+q.options.forEach((option,index) => {
+
+const button =
+document.createElement("button");
+
+button.className = "option";
+
+const letters = ["A","B","C","D"];
+
+button.innerHTML =
+"<b>" + letters[index] + ".</b> " + option;
+
+
+/* PREVIOUS ANSWER */
+
+if(selectedAnswers[currentQuestion] !== null){
+
+button.disabled = true;
+
+if(index === q.answer){
+
+button.classList.add("correct");
+
+}
+
+if(
+index === selectedAnswers[currentQuestion] &&
+selectedAnswers[currentQuestion] !== q.answer
+){
+
+button.classList.add("wrong");
+
+}
+
+}
+
+
+/* CLICK */
+
+button.onclick = function(){
+
+selectAnswer(index);
+
+};
+
+
+optionsContainer.appendChild(button);
+
+});
+
+
+/* SHOW RESULT IF ALREADY ANSWERED */
+
+if(selectedAnswers[currentQuestion] !== null){
+
+resultMessage.style.display = "block";
+
+if(selectedAnswers[currentQuestion] === q.answer){
+
+resultMessage.className =
+"result-message result-correct";
+
+resultMessage.innerHTML =
+"✅ Correct Answer! Well done!";
+
+}
+
+else{
+
+resultMessage.className =
+"result-message result-wrong";
+
+resultMessage.innerHTML =
+"❌ Wrong Answer! Correct answer is: " +
+q.options[q.answer];
+
+}
+
+}
+
+}
+
+
+/* SELECT ANSWER */
+
+function selectAnswer(selected){
+
+if(selectedAnswers[currentQuestion] !== null){
+
+return;
+
+}
+
+
+selectedAnswers[currentQuestion] = selected;
+
+
+const q = questions[currentQuestion];
+
+const buttons =
+document.querySelectorAll(".option");
+
+
+buttons.forEach((button,index)=>{
+
+button.disabled = true;
+
+
+if(index === q.answer){
+
+button.classList.add("correct");
+
+}
+
+});
+
+
+const resultMessage =
+document.getElementById("resultMessage");
+
+resultMessage.style.display = "block";
+
+
+if(selected === q.answer){
+
+score++;
+
+document.getElementById("score").innerHTML =
+score;
+
+resultMessage.className =
+"result-message result-correct";
+
+resultMessage.innerHTML =
+"✅ Correct Answer! Well done!";
+
+}
+
+else{
+
+buttons[selected].classList.add("wrong");
+
+resultMessage.className =
+"result-message result-wrong";
+
+resultMessage.innerHTML =
+"❌ Wrong Answer! Correct answer is: " +
+q.options[q.answer];
+
+}
+
+}
+
+
+/* NEXT */
+
+function nextQuestion(){
+
+if(currentQuestion < questions.length - 1){
+
+currentQuestion++;
+
+loadQuestion();
+
+}
+
+else{
+
+endQuiz();
+
+}
+
+}
+
+
+/* PREVIOUS */
+
+function previousQuestion(){
+
+if(currentQuestion > 0){
+
+currentQuestion--;
+
+loadQuestion();
+
+}
+
+}
+
+
+/* TIMER */
+
+function startTimer(){
+
+setInterval(function(){
+
+let minutes =
+Math.floor(time / 60);
+
+let seconds =
+time % 60;
+
+
+document.getElementById("timer").innerHTML =
+minutes + ":" +
+(seconds < 10 ? "0" : "") +
+seconds;
+
+
+if(time <= 0){
+
+endQuiz();
+
+}
+
+time--;
+
+},1000);
+
+}
+
+
+/* END QUIZ */
+
+function endQuiz(){
+
+let answered =
+selectedAnswers.filter(
+answer => answer !== null
+).length;
+
+
+let percentage =
+Math.round(
+(score / questions.length) * 100
+);
+
+
+let message = "";
+
+
+if(percentage >= 80){
+
+message =
+"🏆 Excellent! Outstanding Performance!";
+
+}
+
+else if(percentage >= 60){
+
+message =
+"👏 Very Good! Keep Going!";
+
+}
+
+else if(percentage >= 40){
+
+message =
+"👍 Good Try! Practice More!";
+
+}
+
+else{
+
+message =
+"💪 Keep Practicing! You Will Improve!";
+
+}
+
+
+document.getElementById("quizCard").innerHTML = `
+
+<div class="final-result">
+
+<h1>🎉 Quiz Completed!</h1>
+
+<h2>Your Score</h2>
+
+<div class="final-score">
+
+${score} / ${questions.length}
+
+</div>
+
+<h2>${percentage}%</h2>
+
+<p>${message}</p>
+
+<p>Questions Attempted: ${answered}</p>
+
+<p>Correct Answers: ${score}</p>
+
+<p>Wrong / Unanswered: ${questions.length - score}</p>
+
+<button class="nav-btn next"
+onclick="restartQuiz()">
+
+🔄 Restart Quiz
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+/* RESTART */
+
+function restartQuiz(){
+
+location.reload();
+
+}
+
+
+/* START */
+
+loadQuestion();
+
+startTimer();
+
+
+</script>
+
+</body>
+</html>
